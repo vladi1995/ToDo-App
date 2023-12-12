@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import Search from "./components/Search";
+import UserList from "./components/UserList";
 import './App.css';
+import { useEffect, useState } from "react";
+import * as userService from './services/userService';
 
 function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    userService.getAllUsers()
+      .then(users => setUsers(users))
+      .catch(err => console.log('Error ' + err));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <main className="main">
+        <section className="card users-container">
+          <Search />
+          <UserList users = {users}/>
+          
+          <button class="btn-add btn">Add new user</button>
+        </section>
+      </main>
+      <Footer />
+    </>
   );
 }
 
