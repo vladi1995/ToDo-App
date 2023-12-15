@@ -15,15 +15,30 @@ function App() {
       .catch(err => console.log('Error ' + err));
   }, []);
 
+  const onUserCreateSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    const createdUser = await userService.create(data);
+    
+    setUsers(oldUsers => [...oldUsers, createdUser]);
+  };
+
+  const onDeleteClick = async (userId) => {
+    await userService.del(userId);
+    console.log(userId);
+    setUsers(oldUsers => oldUsers.filter(x => x._id !== userId));
+  };
+
   return (
     <>
       <Header />
       <main className="main">
         <section className="card users-container">
           <Search />
-          <UserList users = {users}/>
-          
-          <button class="btn-add btn">Add new user</button>
+
+          <UserList users = {users} onUserCreateSubmit={onUserCreateSubmit} onDeleteClick={onDeleteClick} />
         </section>
       </main>
       <Footer />
