@@ -9,10 +9,12 @@ export default function UserList({
     users,
     onUserCreateSubmit,
     onDeleteClick,
+    onUserUpdateSubmit,
 }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [showAddUser, setShowAddUser] = useState(false);
     const [showDeleteUser, setShowDeleteUser] = useState(null);
+    const [showEditUser, setShowEditUser] = useState(null);
 
     const onInfoClick = (userId) => {
         userService.getUser(userId)
@@ -25,6 +27,7 @@ export default function UserList({
         setSelectedUser(null);
         setShowAddUser(false);
         setShowDeleteUser(false);
+        setShowEditUser(false);
     };
 
     const onAddUserClick = () => {
@@ -36,14 +39,23 @@ export default function UserList({
         setShowAddUser(false);
     };
 
+    const onUserUpdateSubmitHandler  = (e, userId) => {
+        onUserUpdateSubmit(e, userId);
+        setShowEditUser(false);
+    };
+
     const onDeleteUserClick = (userId) => {
         setShowDeleteUser(userId);
     };
 
     const onDeleteHandler = () => {
         onDeleteClick(showDeleteUser);
-        console.log(showDeleteUser);
         onClose();
+    };
+
+    const onEditClick = async (userId) => {
+        const user = await userService.getUser(userId);
+        setShowEditUser(user);
     };
 
     return (
@@ -51,7 +63,7 @@ export default function UserList({
             {selectedUser && <UserDetails {...selectedUser} onClose={onClose} />}
             {showAddUser && <UserCreate onClose={onClose} onUserCreateSubmit={onUserCreateSubmitHandler} />}
             {showDeleteUser && <Delete onClose={onClose} onDelete={onDeleteHandler} />}
-
+            {showEditUser && <UserCreate user={showEditUser} onClose={onClose} onUserCreateSubmit={onUserUpdateSubmitHandler} /> }
             <div className="table-wrapper">
                 {/* <!-- Overlap components  --> */}
 
@@ -180,7 +192,7 @@ export default function UserList({
                     </thead>
                     <tbody>
                         {/* <!-- Table row component --> */}
-                        {users.map(user => <User key={user._id} {...user} onInfoClick={onInfoClick} onDeleteUserClick={onDeleteUserClick} />)}
+                        {users.map(user => <User key={user._id} {...user} onInfoClick={onInfoClick} onDeleteUserClick={onDeleteUserClick} onEditUserClick={onEditClick} />)}
                     </tbody>
                 </table>
             </div>
