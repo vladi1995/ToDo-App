@@ -10,6 +10,10 @@ export default function UserList({
     onUserCreateSubmit,
     onDeleteClick,
     onUserUpdateSubmit,
+    formValues,
+    formChangeHandler,
+    formErrors,
+    formValidate
 }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [showAddUser, setShowAddUser] = useState(false);
@@ -61,9 +65,9 @@ export default function UserList({
     return (
         <>
             {selectedUser && <UserDetails {...selectedUser} onClose={onClose} />}
-            {showAddUser && <UserCreate onClose={onClose} onUserCreateSubmit={onUserCreateSubmitHandler} />}
+            {showAddUser && <UserCreate onClose={onClose} onUserCreateSubmit={onUserCreateSubmitHandler} formValues={formValues} formChangeHandler={formChangeHandler} formErrors={formErrors} formValidate={formValidate} />}
             {showDeleteUser && <Delete onClose={onClose} onDelete={onDeleteHandler} />}
-            {showEditUser && <UserCreate user={showEditUser} onClose={onClose} onUserCreateSubmit={onUserUpdateSubmitHandler} /> }
+            {showEditUser && <UserCreate user={showEditUser} onClose={onClose} onUserCreateSubmit={onUserUpdateSubmitHandler} formValues={formValues} formChangeHandler={formChangeHandler} /> }
             <div className="table-wrapper">
                 {/* <!-- Overlap components  --> */}
 
