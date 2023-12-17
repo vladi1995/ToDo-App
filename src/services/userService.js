@@ -1,7 +1,13 @@
 const baseUrl = 'http://localhost:3005/api/users';
 
-export const getAllUsers = async () => {
-    const response = await fetch(baseUrl);
+export const getAllUsers = async (sortTypeFromUserList, sortType) => {
+    let response = '';
+
+    if (sortTypeFromUserList) {
+        response = await fetch(`${baseUrl}?sort=${sortTypeFromUserList}&order=${sortType}`);
+    } else {
+        response = await fetch(baseUrl);
+    }
     const result = await response.json();
 
     return result.users;

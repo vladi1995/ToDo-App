@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import * as userService from './services/userService';
 
 function App() {
+  const [sortType, setSortType] = useState('asc');
+
   const [formValues, setFormValues] = useState({
     firstName: '',
     lastName: '',
@@ -70,6 +72,13 @@ function App() {
     setFormErrors(errors);
   };
 
+  const sortTypeClick = (sortTypeFromUserList) => {
+    userService.getAllUsers(sortTypeFromUserList, sortType)
+    .then(users => setUsers(users))
+      .catch(err => console.log('Error ' + err));
+      setSortType(sortType => sortType === 'asc' ? 'desc' : 'asc');
+  };
+
   return (
     <>
       <Header />
@@ -85,6 +94,7 @@ function App() {
             formChangeHandler={formChangeHandler} 
             formErrors={formErrors}
             formValidate={formValidate}
+            sortTypeClick={sortTypeClick}
             />
         </section>
       </main>
