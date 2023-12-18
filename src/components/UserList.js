@@ -4,7 +4,6 @@ import UserDetails from "./UserDetails";
 import * as userService from '../services/userService';
 import UserCreate from "./UserCreate";
 import Delete from "./Delete";
-import Pagination from "./Pagination";
 
 export default function UserList({
     users,
@@ -15,7 +14,7 @@ export default function UserList({
     formChangeHandler,
     formErrors,
     formValidate,
-    sortTypeClick
+    sortTypeClick,
 }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [showAddUser, setShowAddUser] = useState(false);
@@ -194,7 +193,7 @@ export default function UserList({
                 </table>
             </div>
             <button className="btn-add btn" onClick={onAddUserClick}>Add new user</button>
-            <Pagination />
+            {/* <Pagination limit={limit} changeLimit={changeLimit} /> */}
         </>
     );
 }

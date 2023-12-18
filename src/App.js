@@ -54,7 +54,7 @@ function App() {
   };
 
   const formChangeHandler = (e) => {
-    setFormValues(state => ({...state, [e.target.name]: e.target.value}));
+    setFormValues(state => ({ ...state, [e.target.name]: e.target.value }));
   };
 
   const formValidate = (e) => {
@@ -67,16 +67,39 @@ function App() {
 
     if (e.target.name === 'lastName' && (value.length < 3 || value.length > 20)) {
       errors.lastName = 'Last name should be between 3 and 20 characters';
-    } 
+    }
 
     setFormErrors(errors);
   };
 
   const sortTypeClick = (sortTypeFromUserList) => {
     userService.getAllUsers(sortTypeFromUserList, sortType)
-    .then(users => setUsers(users))
+      .then(users => setUsers(users))
       .catch(err => console.log('Error ' + err));
-      setSortType(sortType => sortType === 'asc' ? 'desc' : 'asc');
+    setSortType(sortType => sortType === 'asc' ? 'desc' : 'asc');
+  };
+
+  const [formValuesSearch, setFormValuesSearch] = useState({
+    searchValue: '',
+    searchCriteria: '',
+  });
+
+  const changeFormValues = (e) => {
+    setFormValuesSearch(state => ({ ...state, [e.target.name]: e.target.value }));
+  };
+
+  const clearContent = () => {
+    setFormValuesSearch(state => ({ ...state, searchValue: '' }));
+    userService.getAllUsers()
+      .then(users => setUsers(users))
+      .catch(err => console.log('Error ' + err));
+  };
+
+  const onUserSearch = (e) => {
+    e.preventDefault();
+    userService.getAllUsersSearch(formValuesSearch.searchValue, formValuesSearch.searchCriteria)
+      .then(users => setUsers(users))
+      .catch(err => console.log('Error ' + err));
   };
 
   return (
@@ -84,18 +107,21 @@ function App() {
       <Header />
       <main className="main">
         <section className="card users-container">
-          <Search />
+          <Search formValuesSearch={formValuesSearch}
+            changeFormValues={changeFormValues}
+            clearContent={clearContent}
+            onUserSearch={onUserSearch} />
           <UserList
-            users={users} 
-            onUserCreateSubmit={onUserCreateSubmit} 
+            users={users}
+            onUserCreateSubmit={onUserCreateSubmit}
             onDeleteClick={onDeleteClick}
-            onUserUpdateSubmit={onUserUpdateSubmit} 
+            onUserUpdateSubmit={onUserUpdateSubmit}
             formValues={formValues}
-            formChangeHandler={formChangeHandler} 
+            formChangeHandler={formChangeHandler}
             formErrors={formErrors}
             formValidate={formValidate}
             sortTypeClick={sortTypeClick}
-            />
+          />
         </section>
       </main>
       <Footer />

@@ -6,8 +6,15 @@ export const getAllUsers = async (sortTypeFromUserList, sortType) => {
     if (sortTypeFromUserList) {
         response = await fetch(`${baseUrl}?sort=${sortTypeFromUserList}&order=${sortType}`);
     } else {
-        response = await fetch(baseUrl);
+        response = await fetch(`${baseUrl}`);
     }
+    const result = await response.json();
+
+    return result.users;
+};
+
+export const getAllUsersSearch = async(searchValue, searchCriteria) => {
+    const response = await fetch(`${baseUrl}?search=${searchValue}&criteria=${searchCriteria}`);
     const result = await response.json();
 
     return result.users;

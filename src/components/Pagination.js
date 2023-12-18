@@ -1,13 +1,16 @@
-export default function Pagination() {
+export default function Pagination({
+    limit,
+    changeLimit
+}) {
     return (
         <div className="pagination position">
             <div className="limits">
                 <span>Items per page:</span>
-                <select name="limit" className="limit" value="5">
+                <select name="limit" className="limit" value={limit} onChange={changeLimit}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
                     <option value="5">5</option>
-                    <option value="5">10</option>
-                    <option value="5">15</option>
-                    <option value="5">20</option>
+                    <option value="10">10</option>
                 </select>
             </div>
             <p className="pages">1 - 1 of 1</p>
